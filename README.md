@@ -88,7 +88,7 @@ token = dapi...
 All scripts use these settings:
 ```python
 DATABRICKS_PROFILE = 'fe'
-WAREHOUSE_ID = '4b9b953939869799'
+WAREHOUSE_ID = 'xxxxxxxx'
 SCHEMA = 'hql_test'  # Isolated test schema
 ```
 
