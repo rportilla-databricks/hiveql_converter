@@ -6,13 +6,18 @@ __pycache__/
 .Python
 venv/
 env/
+.env
 
 # Results
 spark_sql_converted/
 spark_sql_final/
+databricks_sql/
+databricks_from_trino/
 validation_results.txt
 conversion_validation_results.txt
 processing_results.txt
+conversion_results.txt
+trino_conversion_results.txt
 
 # IDE
 .vscode/
@@ -24,4 +29,10 @@ processing_results.txt
 # OS
 .DS_Store
 Thumbs.db
+
+.env
+.env.*
+*.pem
+*.key
+credentials.json
 

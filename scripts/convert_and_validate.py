@@ -2,6 +2,9 @@
 """
 Convert HQL to Spark SQL using AI_QUERY, then validate with EXPLAIN.
 This script uses Databricks AI_QUERY to automatically convert HiveQL to Spark SQL.
+
+Environment Variables Required:
+- DATABRICKS_WAREHOUSE_ID: Your SQL warehouse ID
 """
 
 import os
@@ -290,8 +293,8 @@ def save_detailed_results(all_results: List[Dict], output_file: Path):
 def main():
     """Main execution function."""
     # Configuration
-    DATABRICKS_PROFILE = 'fe'  # Change this to 'fe' or 'logfood' if needed
-    WAREHOUSE_ID = '4b9b953939869799'  # Set this if you have a specific warehouse ID
+    DATABRICKS_PROFILE = os.getenv('DATABRICKS_PROFILE', 'fe')
+    WAREHOUSE_ID = os.getenv('DATABRICKS_WAREHOUSE_ID')
     
     # Get script directory and set up paths
     script_dir = Path(__file__).parent.parent
@@ -306,6 +309,11 @@ def main():
     
     if not hql_files:
         print(f"{Colors.RED}No HQL files found in {hql_dir}{Colors.RESET}")
+        return
+    
+    if not WAREHOUSE_ID:
+        print(f"{Colors.RED}✗ DATABRICKS_WAREHOUSE_ID environment variable not set{Colors.RESET}")
+        print(f"{Colors.YELLOW}Set it with: export DATABRICKS_WAREHOUSE_ID=your_warehouse_id{Colors.RESET}")
         return
     
     print(f"{Colors.BLUE}{Colors.BOLD}{'='*80}{Colors.RESET}")

@@ -4,6 +4,7 @@ Generate sample data for HQL to Spark SQL validation.
 Creates all necessary tables and inserts sample data using Databricks SQL.
 """
 
+import os
 import configparser
 from pathlib import Path
 from typing import Tuple
@@ -300,13 +301,18 @@ def insert_sample_data(cursor):
 
 def main():
     """Main execution function."""
-    DATABRICKS_PROFILE = 'fe'
-    WAREHOUSE_ID = '4b9b953939869799'  # Set your warehouse ID here
+    DATABRICKS_PROFILE = os.getenv('DATABRICKS_PROFILE', 'fe')
+    WAREHOUSE_ID = os.getenv('DATABRICKS_WAREHOUSE_ID')
     SCHEMA = 'hql_test'  # Dedicated schema for migration testing
     
     print(f"{Colors.BLUE}{Colors.BOLD}{'='*80}{Colors.RESET}")
     print(f"{Colors.BLUE}{Colors.BOLD}Sample Data Generator for HQL Migration{Colors.RESET}")
     print(f"{Colors.BLUE}{Colors.BOLD}{'='*80}{Colors.RESET}")
+    
+    if not WAREHOUSE_ID:
+        print(f"\n{Colors.RED}✗ DATABRICKS_WAREHOUSE_ID environment variable not set{Colors.RESET}")
+        print(f"{Colors.YELLOW}Set it with: export DATABRICKS_WAREHOUSE_ID=your_warehouse_id{Colors.RESET}")
+        return
     
     # Read config
     try:

@@ -7,6 +7,7 @@ IMPORTANT: This test REQUIRES sample data tables to exist first!
 Run: python scripts/generate_sample_data.py
 """
 
+import os
 import configparser
 from pathlib import Path
 from typing import Tuple, List, Dict
@@ -213,8 +214,8 @@ def print_summary(all_results: List[Dict]):
 def main():
     """Main execution function."""
     # Configuration
-    DATABRICKS_PROFILE = 'fe'
-    WAREHOUSE_ID = '4b9b953939869799'
+    DATABRICKS_PROFILE = os.getenv('DATABRICKS_PROFILE', 'fe')
+    WAREHOUSE_ID = os.getenv('DATABRICKS_WAREHOUSE_ID')
     SCHEMA = 'hql_test'  # Dedicated schema for migration testing
     CLEANUP_AFTER_TEST = True  # Set to False to keep tables for inspection
     
@@ -231,6 +232,11 @@ def main():
     
     if not sql_files:
         print(f"{Colors.RED}No SQL files found in {sql_dir}{Colors.RESET}")
+        return
+    
+    if not WAREHOUSE_ID:
+        print(f"{Colors.RED}✗ DATABRICKS_WAREHOUSE_ID environment variable not set{Colors.RESET}")
+        print(f"{Colors.YELLOW}Set it with: export DATABRICKS_WAREHOUSE_ID=your_warehouse_id{Colors.RESET}")
         return
     
     print(f"{Colors.BLUE}{Colors.BOLD}{'='*80}{Colors.RESET}")
